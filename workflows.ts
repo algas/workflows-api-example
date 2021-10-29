@@ -27,12 +27,18 @@ export const listWorkflows = async (projectId: string, location: string) => {
   return res?.data?.workflows;
 }
 
-export const createWorkflow = async (projectId: string, location: string, workflowName: string, soruce: string) => {
+export interface CreateWorkflowParams {
+  labels?: {[k:string]: string};
+  sourceContents: string;
+}
+
+export const createWorkflow = async (projectId: string, location: string, workflowName: string, params: CreateWorkflowParams) => {
   const res = await workflows.projects.locations.workflows.create({
     parent: `projects/${projectId}/locations/${location}`,
     workflowId: workflowName,
     requestBody: {
-      sourceContents: soruce,
+      labels: params.labels,
+      sourceContents: params.sourceContents,
     },
   });
   return res?.data;
